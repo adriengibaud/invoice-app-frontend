@@ -12,6 +12,17 @@
     "sourceType": "module"
   },
   "plugins": ["react", "prettier"],
-  "rules": { "prettier/prettier": "warn", "react/state-in-constructor": "off" },
-  "parser": "babel-eslint"
+  "rules": {
+    "prettier/prettier": "warn",
+    "react/state-in-constructor": "off",
+    "import/no-unresolved": "off"
+  },
+  "parser": "babel-eslint",
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
 }

@@ -5,9 +5,12 @@ function srcPath(subdir) {
 }
 module.exports = {
   resolve: {
+    modules: [path.resolve(__dirname, './src'), 'node_modules'],
+    extensions: ['.js', '.jsx', '.json'],
     alias: {
       components: srcPath('app/components'),
-      header: srcPath('app/components/header'),
+      utils: srcPath('app/utils'),
+      interface: srcPath('app/shared/interfaces'),
     },
   },
 };
