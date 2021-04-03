@@ -3,7 +3,7 @@ const theme = {
     primary: '#0c9880',
     primaryLight: '#83b3ae',
     secondary: '#28322d',
-    secondaryLight: '#65626b',
+    secondaryLight: '#564e66',
     white: '#f0edea',
   },
 };

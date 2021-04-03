@@ -1,14 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import logo from 'assets/logo.svg';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 const NavBar = () => (
   <Container>
-    <LogoContainer>
-      <img src={logo} alt="" />
+    <Link to="/">
+      <LogoContainer>
+        <img src={logo} alt="" />
 
-      <BackgroundSplit />
-    </LogoContainer>
+        <BackgroundSplit />
+      </LogoContainer>
+    </Link>
   </Container>
 );
 
@@ -17,16 +20,8 @@ export default NavBar;
 const Container = styled.div`
   width: 100px;
   height: 100vh;
-  background: ${(props) => props.theme.colors.light};
-`;
-
-const rotate = keyframes`
-   from {
-     transform: rotate(0deg)
-   }
-   to {
-     transform: rotate(360deg)
-   }
+  background: ${(props) => props.theme.colors.secondaryLight};
+  border-radius: 0 25px 25px 0;
 `;
 
 const LogoContainer = styled.div`
@@ -40,10 +35,11 @@ const LogoContainer = styled.div`
     z-index: 3;
     top: 30px;
     left: 30px;
+    transition: 1s;
   }
   :hover {
     img {
-      animation: ${rotate} 1s linear;
+      transform: rotate(360deg);
     }
   }
 `;
