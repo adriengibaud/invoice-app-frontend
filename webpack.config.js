@@ -11,6 +11,7 @@ module.exports = {
       components: srcPath('app/components'),
       utils: srcPath('app/utils'),
       interface: srcPath('app/shared/interfaces'),
+      buttons: srcPath('app/conponents/buttons'),
     },
   },
 };
