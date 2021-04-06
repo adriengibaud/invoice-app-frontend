@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import InvoiceStatus from './InvoiceStatus';
 
-const InvoiceEntry = ({ invoice }) => (
+const InvoiceListEntry = ({ invoice }) => (
   <InvoiceBody>
     <p className="id">{invoice.id}</p>
     <p className="payment-due">Due {invoice.paymentDue}</p>
@@ -18,11 +18,11 @@ const InvoiceEntry = ({ invoice }) => (
   </InvoiceBody>
 );
 
-InvoiceEntry.propTypes = {
+InvoiceListEntry.propTypes = {
   invoice: PropTypes.string.isRequired,
 };
 
-export default InvoiceEntry;
+export default InvoiceListEntry;
 
 const InvoiceBody = styled.div`
   width: 730px;
@@ -38,18 +38,23 @@ const InvoiceBody = styled.div`
   -webkit-box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.1);
   box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.1);
   .id {
-    font-weight: bold;
+    font-weight: 900;
     grid-area: id;
+    color: #551a8b;
   }
+
   .payment-due {
     grid-area: payment-due;
+    color: ${(props) => props.theme.colors.secondaryLight};
   }
   .client-name {
     grid-area: client-name;
+    color: ${(props) => props.theme.colors.secondaryLight};
   }
   .total {
     grid-area: total;
     justify-self: end;
+    font-weight: 900;
   }
   .status {
     grid-area: status;
@@ -58,5 +63,29 @@ const InvoiceBody = styled.div`
   .svg {
     grid-area: svg;
     justify-self: end;
+  }
+  @media screen and (max-width: 800px) {
+    width: 650px;
+    grid-template-columns: 90px 150px 100px 120px 124px 30px;
+  }
+  @media screen and (max-width: 670px) {
+    width: 90vw;
+    height: 134px;
+    padding: 20px;
+    grid-template-columns: 50% 50%;
+    grid-template-row: 50% 25% 25%;
+    grid-template-areas:
+      'id client-name'
+      'payment-due status'
+      'total status';
+    .svg {
+      display: none;
+    }
+    .client-name {
+      justify-self: end;
+    }
+    .total {
+      justify-self: start;
+    }
   }
 `;

@@ -1,7 +1,7 @@
 import Auth from 'components/Auth';
 import Home from 'components/Home';
 import NavBar from 'components/NavBar/NavBar';
-import Invoice from 'components/InvoicesList/Invoice';
+import Invoice from 'components/Invoice/Invoice';
 import GlobalStyle from 'global.style';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -43,6 +43,9 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: row;
   background: ${(props) => props.theme.colors.white};
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
+  @media screen and (max-width: 900px) {
+    flex-direction: column;
+  }
 `;

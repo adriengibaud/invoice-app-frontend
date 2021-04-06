@@ -5,6 +5,7 @@ const theme = {
     secondary: '#28322d',
     secondaryLight: '#564e66',
     white: '#f0edea',
+    red: '#ff9797',
   },
 };
 

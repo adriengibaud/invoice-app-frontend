@@ -22,11 +22,17 @@ const Container = styled.div`
   height: 100vh;
   background: ${(props) => props.theme.colors.secondaryLight};
   border-radius: 0 25px 25px 0;
+  @media screen and (max-width: 900px) {
+    height: 80px;
+    width: 100vw;
+    border-radius: 0;
+  }
 `;
 
 const LogoContainer = styled.div`
   background: ${(props) => props.theme.colors.primary};
   height: 100px;
+  width: 100px;
   border-radius: 0 25px 25px 0;
   z-index: 0;
   img {
@@ -42,6 +48,15 @@ const LogoContainer = styled.div`
       transform: rotate(360deg);
     }
   }
+  @media screen and (max-width: 900px) {
+    height: 80px;
+    width: 80px;
+    img {
+      width: 30px;
+      top: 25px;
+      left: 25px;
+    }
+  }
 `;
 
 const BackgroundSplit = styled.div`
@@ -50,4 +65,8 @@ const BackgroundSplit = styled.div`
   position: relative;
   border-radius: 25px 0 25px 0;
   top: 50px;
+  @media screen and (max-width: 900px) {
+    height: 40px;
+    top: 40px;
+  }
 `;

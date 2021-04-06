@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import NewInvoiceButton from 'components/buttons/NewInvoiceButton';
-import InvoiceEntry from './InvoiceEntry';
+import InvoiceListEntry from './InvoiceListEntry';
 
 const InvoicesList = () => {
   const invoicesData = useSelector(({ invoices }) => invoices);
@@ -31,7 +31,7 @@ const InvoicesList = () => {
       <InvoicesListContainer>
         {invoicesData.map((e) => (
           <Link style={{ textDecoration: 'none' }} to={`/invoice/${e.id}`}>
-            <InvoiceEntry invoice={e} />
+            <InvoiceListEntry invoice={e} />
           </Link>
         ))}
       </InvoicesListContainer>
@@ -43,8 +43,16 @@ export default InvoicesList;
 
 const InvoicesContainer = styled.div`
   width: 730px;
-  height: 80vh;
-  margin: auto auto;
+  margin: 5vh auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  @media screen and (max-width: 800px) {
+    width: 650px;
+  }
+  @media screen and (max-width: 670px) {
+    width: 90vw;
+  }
 `;
 
 const InvoicesHeader = styled.div`
@@ -69,7 +77,7 @@ const InvoicesTitle = styled.div`
 `;
 
 const InvoicesListContainer = styled.div`
-  width: 730px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 15px;
