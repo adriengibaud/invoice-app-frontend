@@ -66,13 +66,21 @@ const InvoicesTitle = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 60px;
+  height: 100%;
   h2 {
     font-size: 32px;
   }
   p {
     color: ${(props) => props.theme.colors.secondaryLight};
     font-size: 12px;
+  }
+  @media screen and (max-width: 670px) {
+    height: 50px;
+    width: 100px;
+    gap: 10px;
+    h2 {
+      font-size: 20px;
+    }
   }
 `;
 

@@ -12,7 +12,8 @@ const Button = () => (
         />
       </svg>
     </PlusContainer>
-    <p>New Invoice</p>
+    <p className="completeText">New Invoice</p>
+    <p className="reducedText">New</p>
   </ButtonContainer>
 );
 
@@ -32,13 +33,24 @@ const ButtonContainer = styled.button`
   :focus {
     outline: 0;
   }
-
+  .reducedText {
+    display: none;
+  }
   p {
     font-size: 15px;
     font-weight: normal;
     margin-right: 8px;
     color: ${(props) => props.theme.colors.white};
     letter-spacing: -0.25px;
+  }
+  @media screen and (max-width: 670px) {
+    width: 90px;
+    .reducedText {
+      display: inline;
+    }
+    .completeText {
+      display: none;
+    }
   }
 `;
 const PlusContainer = styled.div`

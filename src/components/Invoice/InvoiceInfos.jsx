@@ -123,11 +123,51 @@ const Infos = styled.div`
       gap: 2px;
     }
   }
-
   .sentTo {
     display: flex;
     flex-direction: column;
     gap: 15px;
     grid-area: sentTo;
+  }
+  @media screen and (max-width: 670px) {
+    grid-template-columns: 45% 55%;
+    grid-template-rows: auto;
+    height: 53%;
+    row-gap: 20px;
+    grid-template-areas:
+      'id-desc id-desc'
+      'senderAddress senderAddress'
+      'leftPanel billTo'
+      'sentTo sentTo';
+    h5 {
+      font-size: 15px;
+    }
+    .id-desc {
+      gap: 5px;
+      h5 {
+        font-size: 12px;
+      }
+      p {
+        font-size: 12px;
+      }
+    }
+    .senderAddress {
+      text-align: start;
+      p {
+        font-size: 11px;
+      }
+    }
+    .sentTo {
+      gap: 10px;
+    }
+    .billTo {
+      gap: 12px;
+    }
+    .invoiceDate {
+      gap: 12px;
+    }
+    .paymentDue {
+      gap: 12px;
+    }
   }
 `;

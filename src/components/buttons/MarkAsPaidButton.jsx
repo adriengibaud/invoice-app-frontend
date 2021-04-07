@@ -14,4 +14,5 @@ const MarkAsPaidButtonContainer = styled.button`
   border-radius: 24px;
   background: ${(props) => props.theme.colors.primary};
   color: white;
+  -webkit-tap-highlight-color: transparent;
 `;

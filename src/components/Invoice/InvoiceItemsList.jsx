@@ -15,6 +15,9 @@ const InvoiceItemsList = ({ invoiceItems, total }) => (
         <ItemLine>
           <p className="itemName">{e.name}</p>
           <p className="quantity">{e.quantity}</p>
+          <p className="quantityPhone">
+            {e.quantity} x {e.price}
+          </p>
           <p className="price">{e.price}</p>
           <p className="total">{e.total}</p>
         </ItemLine>
@@ -72,6 +75,9 @@ const HeaderGrid = styled.div`
     justify-self: end;
     grid-area: total;
   }
+  @media screen and (max-width: 670px) {
+    display: none;
+  }
 `;
 
 const ItemLine = styled.div`
@@ -96,6 +102,33 @@ const ItemLine = styled.div`
     grid-area: total;
     font-weight: 900;
     color: ${(props) => props.theme.colors.secondary};
+  }
+  .quantityPhone {
+    display: none;
+  }
+  @media screen and (max-width: 670px) {
+    grid-template-columns: 60% 40%;
+    grid-template-rows: 20px 20px;
+    grid-template-areas:
+      'itemName total'
+      'quantityPhone total';
+    p {
+      font-size: 13px;
+    }
+    .price {
+      display: none;
+    }
+    .quantity {
+      display: none;
+    }
+    .quantityPhone {
+      display: inline;
+      grid-area: quantityPhone;
+    }
+    .total {
+      justify-self: end;
+      align-self: center;
+    }
   }
 `;
 
