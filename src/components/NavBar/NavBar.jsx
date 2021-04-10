@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from 'assets/logo.svg';
 import styled from 'styled-components';
+import Auth from 'components/auth/Auth';
 
 const NavBar = () => (
   <Container>
@@ -12,6 +13,7 @@ const NavBar = () => (
         <BackgroundSplit />
       </LogoContainer>
     </Link>
+    <Auth />
   </Container>
 );
 
@@ -22,10 +24,14 @@ const Container = styled.div`
   height: 100vh;
   background: ${(props) => props.theme.colors.secondaryLight};
   border-radius: 0 25px 25px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   @media screen and (max-width: 900px) {
     height: 80px;
     width: 100vw;
     border-radius: 0;
+    flex-direction: row;
   }
 `;
 

@@ -1,12 +1,12 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import invoiceReducer from 'reducers/invoiceReducer';
+import { configureStore } from '@reduxjs/toolkit';
+import invoicesReducer from 'reducers/invoicesSlice';
+import userReducer from 'reducers/userSlice';
 
-const reducer = combineReducers({
-  invoices: invoiceReducer,
+const store = configureStore({
+  reducer: {
+    invoices: invoicesReducer,
+    user: userReducer,
+  },
 });
-
-const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
 
 export default store;

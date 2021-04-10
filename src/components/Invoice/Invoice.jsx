@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
+import { selectInvoices } from 'reducers/invoicesSlice';
 import { useParams } from 'react-router-dom';
 import BackButton from 'components/buttons/BackButton';
 import EditButton from 'components/buttons/EditButton';
@@ -11,7 +12,7 @@ import InvoiceInfos from './InvoiceInfos';
 import InvoiceItemsList from './InvoiceItemsList';
 
 const Invoice = () => {
-  const invoicesData = useSelector(({ invoices }) => invoices);
+  const invoicesData = useSelector(selectInvoices);
   const { id } = useParams();
   const invoice = invoicesData.find((n) => n.id === id);
 

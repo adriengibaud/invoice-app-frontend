@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import NewInvoiceButton from 'components/buttons/NewInvoiceButton';
+import { selectInvoices } from 'reducers/invoicesSlice';
 import InvoiceListEntry from './InvoiceListEntry';
 
 const InvoicesList = () => {
-  const invoicesData = useSelector(({ invoices }) => invoices);
+  const invoicesData = useSelector(selectInvoices);
+  console.log(invoicesData);
 
   const subCount = () => {
     switch (invoicesData.length) {
