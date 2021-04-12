@@ -1,7 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const EditButton = () => <EditButtonContainer>Edit</EditButtonContainer>;
+// eslint-disable-next-line react/prop-types
+const EditButton = ({ openModal }) => (
+  <EditButtonContainer onClick={openModal}>Edit</EditButtonContainer>
+);
 
 export default EditButton;
 

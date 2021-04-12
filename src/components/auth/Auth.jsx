@@ -10,7 +10,6 @@ import {
 } from 'reducers/userSlice';
 import styled from 'styled-components';
 import { auth, provider } from '../../firebase';
-import AuthButton from './AuthButton';
 
 const Auth = () => {
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ const Auth = () => {
   const [openMenu, setOpenMenu] = useState(false);
 
   const handleSignIn = () => {
-    auth.signInWithPopup(provider);
+    auth.signInWithPopup(provider).then(() => setOpenMenu(false));
   };
   const handleSignOut = () => {
     auth
@@ -33,7 +32,6 @@ const Auth = () => {
 
   useEffect(() => {
     if (userName === null) {
-      setOpenMenu(false);
       auth.onAuthStateChanged((user) => {
         if (user !== null && userEmail === null) {
           console.log(user);
@@ -48,7 +46,7 @@ const Auth = () => {
         }
       });
     }
-  });
+  }, []);
 
   const authContainer = useRef();
 
@@ -71,7 +69,7 @@ const Auth = () => {
       <div>
         {userName ? (
           <UserImage>
-            <img src={userImage} alt="" />
+            {userImage ? <img src={userImage} alt="" /> : <AltImage>{userName[0]}</AltImage>}
             <LogoutMenu openMenu={openMenu} onClick={handleSignOut}>
               Log out
             </LogoutMenu>
@@ -80,7 +78,6 @@ const Auth = () => {
           <LoginButton onClick={handleSignIn}>Sign in</LoginButton>
         )}
       </div>
-      <AuthButton userEmail={userEmail} />
     </AuthContainer>
   );
 };
@@ -99,6 +96,12 @@ const AuthContainer = styled.div`
     width: 80px;
     margin: 0 30px;
   }
+`;
+
+const AltImage = styled.div`
+  width: 60%;
+  height: 60%;
+  background: red;
 `;
 
 const UserImage = styled.div`

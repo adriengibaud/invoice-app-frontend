@@ -1,7 +1,15 @@
 import React from 'react';
+// import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-const DeleteButton = () => <DeleteButtonContainer>Delete</DeleteButtonContainer>;
+const DeleteButton = ({ clickHandler }) => (
+  <DeleteButtonContainer onClick={() => clickHandler()}>Delete</DeleteButtonContainer>
+);
+
+DeleteButton.propTypes = {
+  clickHandler: PropTypes.func.isRequired,
+};
 
 export default DeleteButton;
 

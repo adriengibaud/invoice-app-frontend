@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import NewInvoiceButton from 'components/buttons/NewInvoiceButton';
 import { selectInvoices } from 'reducers/invoicesSlice';
-import InvoiceListEntry from './InvoiceListEntry';
+import InvoiceListEntry from '../components/InvoicesList/InvoiceListEntry';
 
 const InvoicesList = () => {
   const invoicesData = useSelector(selectInvoices);
