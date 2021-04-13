@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
-const Button = () => (
-  <ButtonContainer>
+const NewInvoiceButton = ({ clickHandler }) => (
+  <ButtonContainer onClick={clickHandler()}>
     <PlusContainer>
       <svg width="11" height="11" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -17,7 +18,11 @@ const Button = () => (
   </ButtonContainer>
 );
 
-export default Button;
+NewInvoiceButton.propTypes = {
+  clickHandler: PropTypes.func.isRequired,
+};
+
+export default NewInvoiceButton;
 
 const ButtonContainer = styled.button`
   width: 150px;

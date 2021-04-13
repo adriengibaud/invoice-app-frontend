@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import NewInvoiceButton from 'components/buttons/NewInvoiceButton';
 import { selectInvoices } from 'reducers/invoicesSlice';
+import CreateInvoice from 'components/Invoice/CreateInvoice';
 import InvoiceListEntry from '../components/InvoicesList/InvoiceListEntry';
 
 const InvoicesList = () => {
   const invoicesData = useSelector(selectInvoices);
-  console.log(invoicesData);
+  const [newInvoice, setNewInvoice] = useState(false);
 
   const subCount = () => {
     switch (invoicesData.length) {
@@ -21,23 +22,29 @@ const InvoicesList = () => {
     }
   };
 
+  const toggleCreatingInvoice = () => setNewInvoice(true);
+  const closeCreatingInvoice = () => setNewInvoice(false);
+
   return (
-    <InvoicesContainer>
-      <InvoicesHeader>
-        <InvoicesTitle>
-          <h2>Invoices</h2>
-          <p>{subCount()}</p>
-        </InvoicesTitle>
-        <NewInvoiceButton />
-      </InvoicesHeader>
-      <InvoicesListContainer>
-        {invoicesData.map((e) => (
-          <Link style={{ textDecoration: 'none' }} to={`/invoice/${e.id}`}>
-            <InvoiceListEntry invoice={e} />
-          </Link>
-        ))}
-      </InvoicesListContainer>
-    </InvoicesContainer>
+    <>
+      {newInvoice && <CreateInvoice closeCreatingInvoice={closeCreatingInvoice} />}
+      <InvoicesContainer>
+        <InvoicesHeader>
+          <InvoicesTitle>
+            <h2>Invoices</h2>
+            <p>{subCount()}</p>
+          </InvoicesTitle>
+          <NewInvoiceButton clickHandler={() => toggleCreatingInvoice} />
+        </InvoicesHeader>
+        <InvoicesListContainer>
+          {invoicesData.map((e) => (
+            <Link style={{ textDecoration: 'none' }} to={`/invoice/${e.id}`}>
+              <InvoiceListEntry invoice={e} />
+            </Link>
+          ))}
+        </InvoicesListContainer>
+      </InvoicesContainer>
+    </>
   );
 };
 

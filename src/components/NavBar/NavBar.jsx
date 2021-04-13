@@ -22,6 +22,7 @@ export default NavBar;
 const Container = styled.div`
   width: 100px;
   height: 100vh;
+  z-index: 3;
   background: ${(props) => props.theme.colors.secondaryLight};
   border-radius: 0 25px 25px 0;
   display: flex;
