@@ -19,12 +19,14 @@ const invoiceSchema = {
   },
   items: [
     {
+      id: 'qiweuqoiwdqjd131093810938109',
       name: 'Brand Guidelines',
       quantity: 1,
       price: 1800.9,
       total: 1800.9,
     },
     {
+      id: 'alkdjasdlkjasdlajd908908098asdasd',
       name: 'Brand Guidelines',
       quantity: 1,
       price: 1800.9,

@@ -3,10 +3,13 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
 import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import DatePicker from 'react-datepicker';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import deleteIcon from 'assets/icon-delete.svg';
 import 'react-datepicker/dist/react-datepicker.css';
+import AddItemButton from 'components/buttons/AddItemButton';
 
 const InvoiceForm = ({ invoiceData }) => {
   const [id, setId] = useState(invoiceData.id);
@@ -21,9 +24,10 @@ const InvoiceForm = ({ invoiceData }) => {
   const [total, setTotal] = useState(invoiceData.total);
   const [select, setSelect] = useState('30day');
 
-  useEffect(() => {
+  /* useEffect(() => {
     setTotal(items.map((e) => e.total).reduce((a, b) => a + b, 0));
   }, [items]);
+*/
 
   useEffect(() => {
     if (select !== 'custom' && createdAt !== '') {
@@ -39,12 +43,24 @@ const InvoiceForm = ({ invoiceData }) => {
     console.log('je submit');
   };
 
+  const addItem = () => {
+    console.log(uuidv4());
+    const blankItem = {
+      id: uuidv4(),
+      name: '',
+      city: '',
+      postCode: '',
+      country: '',
+    };
+    return setItems([...items, blankItem]);
+  };
+
   return (
     <FormContainer onSubmit={submitForm}>
       <h1>New Invoice</h1>
       <FormPart>
         <h3>Bill From</h3>
-        <FullSizeEntry>
+        <FullSizeEntry numberPerLine="one">
           <label>Street Address</label>
           <input
             type="text"
@@ -52,7 +68,7 @@ const InvoiceForm = ({ invoiceData }) => {
             onChange={(e) => setSenderAddress({ ...senderAddress, street: e.target.value })}
           />
         </FullSizeEntry>
-        <SmallSizeEntry>
+        <FullSizeEntry numberPerLine="three">
           <div className="container">
             <label>City</label>
             <input
@@ -77,19 +93,19 @@ const InvoiceForm = ({ invoiceData }) => {
               onChange={(e) => setSenderAddress({ ...senderAddress, country: e.target.value })}
             />
           </div>
-        </SmallSizeEntry>
+        </FullSizeEntry>
       </FormPart>
       <FormPart>
         <h3>Bill to</h3>
-        <FullSizeEntry>
+        <FullSizeEntry numberPerLine="one">
           <label>Client's name</label>
           <input type="text" value={clientName} onChange={(e) => setClientName(e.target.value)} />
         </FullSizeEntry>
-        <FullSizeEntry>
+        <FullSizeEntry numberPerLine="one">
           <label>Client's email</label>
           <input type="text" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)} />
         </FullSizeEntry>
-        <FullSizeEntry>
+        <FullSizeEntry numberPerLine="one">
           <label>Street Address</label>
           <input
             type="text"
@@ -97,7 +113,7 @@ const InvoiceForm = ({ invoiceData }) => {
             onChange={(e) => setClientAddress({ ...clientAddress, street: e.target.value })}
           />
         </FullSizeEntry>
-        <SmallSizeEntry>
+        <FullSizeEntry numberPerLine="three">
           <div className="container">
             <label>City</label>
             <input
@@ -122,11 +138,11 @@ const InvoiceForm = ({ invoiceData }) => {
               onChange={(e) => setClientAddress({ ...clientAddress, country: e.target.value })}
             />
           </div>
-        </SmallSizeEntry>
+        </FullSizeEntry>
       </FormPart>
       <FormPart>
-        <SmallSizeEntry>
-          <div className="mediumContainer">
+        <FullSizeEntry numberPerLine={select === 'custom' ? 'three' : 'two'}>
+          <div className="container">
             <label>Invoice Date</label>
             <DatePicker
               className="date"
@@ -135,7 +151,7 @@ const InvoiceForm = ({ invoiceData }) => {
               onChange={(date) => setCreatedAt(date)}
             />
           </div>
-          <div className="mediumContainer">
+          <div className="container">
             <label>Payment Terms</label>
             <select onChange={(e) => setSelect(e.target.value)}>
               <option value="30">30 Days</option>
@@ -146,8 +162,100 @@ const InvoiceForm = ({ invoiceData }) => {
               <option value="custom">Custom</option>
             </select>
           </div>
-          {select === 'custom' && <div className="mediumContainer">coucou</div>}
-        </SmallSizeEntry>
+          {select === 'custom' && (
+            <div className="container">
+              <label>Payment Due</label>
+              <DatePicker
+                popperModifiers={{
+                  preventOverflow: {
+                    enabled: true,
+                  },
+                }}
+                selected={paymentDue}
+                onChange={(date) => setPaymentDue(date)}
+              />
+            </div>
+          )}
+        </FullSizeEntry>
+      </FormPart>
+      <FormPart>
+        <h3>Item List</h3>
+        {items.length > 0 && (
+          <ItemEntry>
+            <ItemInfo label info="itemName">
+              Item Name
+            </ItemInfo>
+            <ItemInfo label info="qty">
+              Qty.
+            </ItemInfo>
+            <ItemInfo label info="price">
+              Price
+            </ItemInfo>
+            <ItemInfo label info="total">
+              Total
+            </ItemInfo>
+            <ItemInfo info="bin" />
+          </ItemEntry>
+        )}
+        {items.length > 0 &&
+          items.map((e) => {
+            return (
+              <ItemEntry>
+                <ItemInfo info="itemName">
+                  <input
+                    value={e.name}
+                    onChange={(p) =>
+                      setItems(() => {
+                        const itemsCopy = [...items];
+                        const index = itemsCopy.findIndex((r) => r.id === e.id);
+                        const item = { ...itemsCopy[index] };
+                        item.name = p.target.value;
+                        itemsCopy[index] = item;
+                        return itemsCopy;
+                      })
+                    }
+                  />
+                </ItemInfo>
+                <ItemInfo info="qty">
+                  <input
+                    value={e.quantity}
+                    onChange={(p) =>
+                      setItems(() => {
+                        const itemsCopy = [...items];
+                        const index = itemsCopy.findIndex((r) => r.id === e.id);
+                        const item = { ...itemsCopy[index] };
+                        item.quantity = p.target.value;
+                        itemsCopy[index] = item;
+                        return itemsCopy;
+                      })
+                    }
+                  />
+                </ItemInfo>
+                <ItemInfo info="price">
+                  <input
+                    value={e.price}
+                    onChange={(p) =>
+                      setItems(() => {
+                        const itemsCopy = [...items];
+                        const index = itemsCopy.findIndex((r) => r.id === e.id);
+                        const item = { ...itemsCopy[index] };
+                        item.price = p.target.value;
+                        itemsCopy[index] = item;
+                        return itemsCopy;
+                      })
+                    }
+                  />
+                </ItemInfo>
+                <ItemInfo info="total">
+                  {e.quantity * e.price > 0 ? e.quantity * e.price : 0}
+                </ItemInfo>
+                <ItemInfo info="bin" onClick={() => setItems(items.filter((r) => r.id !== e.id))}>
+                  <img src={deleteIcon} alt="" />
+                </ItemInfo>
+              </ItemEntry>
+            );
+          })}
+        <AddItemButton margin="20px" clickHandler={() => addItem} />
       </FormPart>
     </FormContainer>
   );
@@ -194,6 +302,7 @@ const FormContainer = styled.form`
   }
   input,
   select {
+    width: 100%;
     height: 40px;
     border: 1px solid #0c9880;
     border-radius: 5px;
@@ -213,28 +322,50 @@ const FormPart = styled.div`
 const FullSizeEntry = styled.div`
   margin-top: 20px;
   display: flex;
+  flex-direction: ${(props) => (props.numberPerLine === 'one' ? 'column' : 'row')};
+  width: 100%;
+  justify-content: space-between;
+  .container {
+    width: ${({ numberPerLine }) =>
+      (numberPerLine === 'three' && '30%') ||
+      (numberPerLine === 'two' && '45%') ||
+      (numberPerLine === 'one' && '100%')};
+    input,
+    select {
+      width: 100%;
+    }
+  }
+`;
+
+const ItemsListContainer = styled.div`
+  display: flex;
   flex-direction: column;
 `;
 
-const SmallSizeEntry = styled.div`
-  margin-top: 20px;
+const ItemEntry = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  .container {
-    width: 30%;
-    input {
-      width: 100%;
-    }
-  }
-  .mediumContainer {
-    width: 45%;
-    input,
-    select {
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-    }
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const ItemInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: ${({ info }) =>
+    (info === 'itemName' && 'flex-start') ||
+    (info === 'qty' && 'center') ||
+    (info === 'price' && 'flex-start') ||
+    (info === 'total' && 'flex-end')};
+  width: ${({ label, info }) =>
+    (info === 'itemName' && '35%') ||
+    (info === 'qty' && '10%') ||
+    (info === 'price' && '17%') ||
+    (info === 'total' && '17%') ||
+    (info === 'bin' && '5%')};
+  img {
+    width: 80%;
   }
 `;
