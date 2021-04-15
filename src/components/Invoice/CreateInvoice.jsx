@@ -2,7 +2,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import invoiceSchema from 'data/invoiceSchema';
-import InvoiceForm from './InvoiceForm';
+import InvoiceForm from '../invoiceForm/InvoiceForm';
 
 const CreateInvoice = ({ closeCreatingInvoice }) => {
   return (
