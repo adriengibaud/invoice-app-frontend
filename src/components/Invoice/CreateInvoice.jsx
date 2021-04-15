@@ -8,7 +8,10 @@ const CreateInvoice = ({ closeCreatingInvoice }) => {
   return (
     <Background onClick={() => closeCreatingInvoice()}>
       <FormContainer onClick={(e) => e.stopPropagation()}>
-        <InvoiceForm invoiceData={invoiceSchema} />
+        <InvoiceForm
+          closeCreatingInvoice={() => closeCreatingInvoice()}
+          invoiceData={invoiceSchema}
+        />
       </FormContainer>
     </Background>
   );
@@ -24,6 +27,8 @@ const Background = styled.div`
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   backdrop-filter: blur(3.5px);
   -webkit-backdrop-filter: blur(3.5px);
+  @media screen and (max-width: 600px) {
+  }
 `;
 
 const FormContainer = styled.div`
@@ -37,5 +42,16 @@ const FormContainer = styled.div`
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
+  }
+  @media screen and (max-width: 900px) {
+    position: relative;
+    padding: 30px;
+    height: 90vh;
+    margin-top: 80px;
+  }
+  @media screen and (max-width: 600px) {
+    width: 100vw;
+    border-radius: 0;
+    height: auto;
   }
 `;

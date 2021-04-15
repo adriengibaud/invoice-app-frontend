@@ -8,11 +8,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import 'react-datepicker/dist/react-datepicker.css';
 import AddItemButton from 'components/buttons/AddItemButton';
+import BackButton from 'components/buttons/BackButton';
 import ItemList from './ItemList';
 import InvoiceDateSelector from './InvoiceDateSelector';
 import Input from './Input';
 
-const InvoiceForm = ({ invoiceData }) => {
+const InvoiceForm = ({ invoiceData, closeCreatingInvoice }) => {
   const [id, setId] = useState(invoiceData.id);
   const [description, setDescription] = useState(invoiceData.description);
   const [createdAt, setCreatedAt] = useState(invoiceData.createdAt);
@@ -23,7 +24,7 @@ const InvoiceForm = ({ invoiceData }) => {
   const [senderAddress, setSenderAddress] = useState(invoiceData.senderAddress);
   const [items, setItems] = useState(invoiceData.items);
   const [total, setTotal] = useState(invoiceData.total);
-  const [select, setSelect] = useState('30day');
+  const [select, setSelect] = useState(30);
 
   /* useEffect(() => {
     setTotal(items.map((e) => e.total).reduce((a, b) => a + b, 0));
@@ -59,14 +60,10 @@ const InvoiceForm = ({ invoiceData }) => {
     const index = itemsCopy.findIndex((r) => r.id === data.id);
     const item = { ...itemsCopy[index] };
     if (type === 'itemName') item.name = value;
-
     if (type === 'qty' && value >= 0) {
       item.quantity = value;
       item.total = value * item.price;
-      console.log(value);
-      console.log(item.total);
     }
-
     if (type === 'price' && value >= 0) {
       item.price = value;
       item.total = value * item.quantity;
@@ -80,42 +77,36 @@ const InvoiceForm = ({ invoiceData }) => {
 
   return (
     <FormContainer onSubmit={submitForm}>
+      <BackButtonContainer>
+        <BackButton clickHandler={() => closeCreatingInvoice()} />
+      </BackButtonContainer>
+
       <h1>New Invoice</h1>
       <FormPart>
         <h3>Bill From</h3>
         <FullSizeEntry numberPerLine="one">
-          <label>Street Address</label>
-          <input
-            type="text"
-            value={senderAddress.street}
-            onChange={(e) => setSenderAddress({ ...senderAddress, street: e.target.value })}
+          <Input
+            text="Street Address"
+            data={senderAddress.street}
+            dataChangeHandler={(street) => setSenderAddress({ ...senderAddress, street })}
           />
         </FullSizeEntry>
         <FullSizeEntry numberPerLine="three">
-          <div className="container">
-            <label>City</label>
-            <input
-              type="text"
-              value={senderAddress.city}
-              onChange={(e) => setSenderAddress({ ...senderAddress, city: e.target.value })}
-            />
-          </div>
-          <div className="container">
-            <label>Post Code</label>
-            <input
-              type="text"
-              value={senderAddress.postCode}
-              onChange={(e) => setSenderAddress({ ...senderAddress, postCode: e.target.value })}
-            />
-          </div>
-          <div className="container">
-            <label>Country</label>
-            <input
-              type="text"
-              value={senderAddress.country}
-              onChange={(e) => setSenderAddress({ ...senderAddress, country: e.target.value })}
-            />
-          </div>
+          <Input
+            text="City"
+            data={senderAddress.city}
+            dataChangeHandler={(city) => setSenderAddress({ ...senderAddress, city })}
+          />
+          <Input
+            text="Post Code"
+            data={senderAddress.postCode}
+            dataChangeHandler={(postCode) => setSenderAddress({ ...senderAddress, postCode })}
+          />
+          <Input
+            text="Country"
+            data={senderAddress.country}
+            dataChangeHandler={(country) => setSenderAddress({ ...senderAddress, country })}
+          />
         </FullSizeEntry>
       </FormPart>
       <FormPart>
@@ -123,40 +114,40 @@ const InvoiceForm = ({ invoiceData }) => {
         <FullSizeEntry numberPerLine="one">
           <Input
             data={clientName}
-            clickHandler={(name) => setClientName(name)}
+            dataChangeHandler={(name) => setClientName(name)}
             text="Client's Name"
           />
           <Input
             data={clientEmail}
-            clickHandler={(email) => setClientEmail}
+            dataChangeHandler={(email) => setClientEmail}
             text="Client's Email"
           />
           <Input
             data={clientAddress.street}
-            clickHandler={(street) => setClientAddress({ ...clientAddress, street })}
+            dataChangeHandler={(street) => setClientAddress({ ...clientAddress, street })}
             text="Street Address"
           />
         </FullSizeEntry>
         <FullSizeEntry numberPerLine="three">
           <Input
             data={clientAddress.city}
-            clickHandler={(city) => setClientAddress({ ...clientAddress, city })}
+            dataChangeHandler={(city) => setClientAddress({ ...clientAddress, city })}
             text="City"
           />
           <Input
             data={clientAddress.postCode}
-            clickHandler={(postCode) => setClientAddress({ ...clientAddress, postCode })}
+            dataChangeHandler={(postCode) => setClientAddress({ ...clientAddress, postCode })}
             text="Post Code"
           />
           <Input
             data={clientAddress.country}
-            clickHandler={(country) => setClientAddress({ ...clientAddress, country })}
+            dataChangeHandler={(country) => setClientAddress({ ...clientAddress, country })}
             text="Country"
           />
         </FullSizeEntry>
       </FormPart>
       <FormPart>
-        <FullSizeEntry numberPerLine={select === 'custom' ? 'three' : 'two'}>
+        <FullSizeEntry numberPerLine={select === 'custom' ? 'three' : 'two'} date>
           <InvoiceDateSelector
             createdAt={createdAt}
             invoiceDateHandler={(date) => setCreatedAt(date)}
@@ -217,6 +208,7 @@ InvoiceForm.propTypes = {
     ]),
     total: PropTypes.number,
   }).isRequired,
+  closeCreatingInvoice: PropTypes.func.isRequired,
 };
 
 export default InvoiceForm;
@@ -238,6 +230,10 @@ const FormContainer = styled.form`
   }
 `;
 
+const BackButtonContainer = styled.div`
+  margin-bottom: 30px;
+`;
+
 const FormPart = styled.div`
   display: flex;
   flex-direction: column;
@@ -253,6 +249,12 @@ const FullSizeEntry = styled.div`
   flex-direction: ${(props) => (props.numberPerLine === 'one' ? 'column' : 'row')};
   width: 100%;
   justify-content: space-between;
+  @media screen and (max-width: 600px) {
+    flex-direction: ${({ twoOnMobile }) => (twoOnMobile ? 'row' : 'row')};
+    flex-wrap: wrap;
+    margin-top: 0;
+  }
+
   .container {
     width: ${({ numberPerLine }) =>
       (numberPerLine === 'three' && '30%') ||
@@ -261,28 +263,8 @@ const FullSizeEntry = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 10px;
-    input,
-    select {
-      width: 100%;
+    @media screen and (max-width: 600px) {
+      width: ${({ date }) => (date ? '45%' : '100%')};
     }
-  }
-`;
-
-const ItemInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: ${({ info }) =>
-    (info === 'itemName' && 'flex-start') ||
-    (info === 'qty' && 'center') ||
-    (info === 'price' && 'flex-start') ||
-    (info === 'total' && 'flex-end')};
-  width: ${({ label, info }) =>
-    (info === 'itemName' && '35%') ||
-    (info === 'qty' && '10%') ||
-    (info === 'price' && '17%') ||
-    (info === 'total' && '17%') ||
-    (info === 'bin' && '5%')};
-  img {
-    width: 80%;
   }
 `;

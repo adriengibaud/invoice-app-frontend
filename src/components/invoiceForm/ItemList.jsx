@@ -67,7 +67,10 @@ const ItemEntry = styled.div`
   justify-content: space-between;
   width: 100%;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
+  @media screen and (max-width: 600px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const ItemData = styled.div`
@@ -93,6 +96,10 @@ const ItemData = styled.div`
   }
   .label {
     display: ${({ position }) => (position === 0 ? 'inline' : 'none')};
+
+    @media screen and (max-width: 600px) {
+      display: inline;
+    }
   }
   img {
     width: 80%;
@@ -103,5 +110,13 @@ const ItemData = styled.div`
     height: 40px;
     line-height: 40px;
     text-align: right;
+  }
+  @media screen and (max-width: 600px) {
+    width: ${({ dataType }) =>
+      (dataType === 'itemName' && '100%') ||
+      (dataType === 'qty' && '15%') ||
+      (dataType === 'price' && '33%') ||
+      (dataType === 'total' && '33%') ||
+      (dataType === 'bin' && '5%')};
   }
 `;

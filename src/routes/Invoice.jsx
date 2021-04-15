@@ -47,7 +47,7 @@ const Invoice = () => {
             </div>
           </Modal>
           <InvoiceContainer>
-            <BackButton />
+            <BackButton clickHandler={() => history.goBack()} />
             <TopContainer>
               <StatusContainer>
                 <p>Status</p>

@@ -17,12 +17,14 @@ const InvoiceDateSelector = ({
     <div className="container">
       <label htmlFor="invoiceDate">
         <p className="label">Invoice Date</p>
-        <DatePicker
-          className="date"
-          selected={createdAt}
-          dateFormat="yyyy/MM/dd"
-          onChange={(date) => invoiceDateHandler(date)}
-        />
+        <div className="dateWrapper">
+          <DatePicker
+            className="date"
+            selected={createdAt}
+            dateFormat="yyyy/MM/dd"
+            onChange={(date) => invoiceDateHandler(date)}
+          />
+        </div>
       </label>
     </div>
     <div className="container">
