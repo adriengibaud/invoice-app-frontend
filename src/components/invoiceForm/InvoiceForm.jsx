@@ -7,34 +7,42 @@ import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import 'react-datepicker/dist/react-datepicker.css';
+import { addDaysToDate, transformDateToString } from 'utils/dateManipulation';
 import AddItemButton from 'components/buttons/AddItemButton';
 import BackButton from 'components/buttons/BackButton';
+import SaveInvoiceButton from 'components/buttons/SaveInvoiceButton';
 import ItemList from './ItemList';
 import InvoiceDateSelector from './InvoiceDateSelector';
 import Input from './Input';
 
-const InvoiceForm = ({ invoiceData, closeCreatingInvoice }) => {
-  const [id, setId] = useState(invoiceData.id);
+const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose }) => {
+  const [id, setId] = useState(invoiceData.id === '' ? uuidv4 : invoiceData.id);
   const [description, setDescription] = useState(invoiceData.description);
-  const [createdAt, setCreatedAt] = useState(invoiceData.createdAt);
-  const [paymentDue, setPaymentDue] = useState(invoiceData.paymentDue);
+  const [createdAt, setCreatedAt] = useState(
+    invoiceData.createdAt.length > 0 ? new Date(invoiceData.createdAt) : ''
+  );
+  const [paymentDue, setPaymentDue] = useState(
+    invoiceData.paymentDue.length > 0 ? new Date(invoiceData.paymentDue) : ''
+  );
   const [clientName, setClientName] = useState(invoiceData.clientName);
   const [clientEmail, setClientEmail] = useState(invoiceData.clientEmail);
   const [clientAddress, setClientAddress] = useState(invoiceData.clientAddress);
   const [senderAddress, setSenderAddress] = useState(invoiceData.senderAddress);
   const [items, setItems] = useState(invoiceData.items);
   const [total, setTotal] = useState(invoiceData.total);
-  const [select, setSelect] = useState(30);
+  const [select, setSelect] = useState(paymentDue.length > 0 ? 'custom' : 30);
 
-  /* useEffect(() => {
-    setTotal(items.map((e) => e.total).reduce((a, b) => a + b, 0));
+  useEffect(() => {
+    if (items.length > 0) {
+      if (items[0].total) {
+        setTotal(items.map((e) => e.total).reduce((a, b) => a + b, 0));
+      }
+    }
   }, [items]);
-*/
 
   useEffect(() => {
     if (select !== 'custom' && createdAt !== '') {
-      setPaymentDue(`je rajoute ${select} jours`);
-      console.log(paymentDue);
+      setPaymentDue(addDaysToDate(createdAt, select));
     } else {
       console.log('je ne fais rien lol');
     }
@@ -42,6 +50,19 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice }) => {
 
   const submitForm = (event) => {
     event.preventDefault();
+  };
+
+  const invoiceFinalData = {
+    id,
+    createdAt: createdAt.getDay ? transformDateToString(createdAt) : '',
+    paymentDue: paymentDue.getDay ? transformDateToString(paymentDue) : '',
+    clientName,
+    clientEmail,
+    senderAddress,
+    clientAddress,
+    items,
+    total,
+    status: 'pending',
   };
 
   const addItem = () => {
@@ -77,6 +98,7 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice }) => {
 
   return (
     <FormContainer onSubmit={submitForm}>
+      <p>{purpose}</p>
       <BackButtonContainer>
         <BackButton clickHandler={() => closeCreatingInvoice()} />
       </BackButtonContainer>
@@ -119,7 +141,7 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice }) => {
           />
           <Input
             data={clientEmail}
-            dataChangeHandler={(email) => setClientEmail}
+            dataChangeHandler={(email) => setClientEmail(email)}
             text="Client's Email"
           />
           <Input
@@ -174,6 +196,12 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice }) => {
           })}
         <AddItemButton margin="20px" clickHandler={() => addItem} />
       </FormPart>
+      <ButtonContainer>
+        <SaveInvoiceButton
+          text="save changes"
+          clickHandler={() => savingInvoice(invoiceFinalData)}
+        />
+      </ButtonContainer>
     </FormContainer>
   );
 };
@@ -209,6 +237,8 @@ InvoiceForm.propTypes = {
     total: PropTypes.number,
   }).isRequired,
   closeCreatingInvoice: PropTypes.func.isRequired,
+  savingInvoice: PropTypes.func.isRequired,
+  purpose: PropTypes.string.isRequired,
 };
 
 export default InvoiceForm;
@@ -224,7 +254,9 @@ const FormContainer = styled.form`
     border: 1px solid #0c9880;
     border-radius: 5px;
     padding: 6px;
+    outline-color: #551a8b;
   }
+
   .label {
     margin-bottom: 10px;
   }
@@ -267,4 +299,10 @@ const FullSizeEntry = styled.div`
       width: ${({ date }) => (date ? '45%' : '100%')};
     }
   }
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
 `;

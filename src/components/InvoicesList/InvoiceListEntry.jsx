@@ -55,6 +55,7 @@ const InvoiceBody = styled.div`
     grid-area: total;
     justify-self: end;
     font-weight: 900;
+    color: #551a8b;
   }
   .status {
     grid-area: status;

@@ -5,8 +5,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = [
   {
     id: 'RT3080',
-    createdAt: '2021-08-18',
-    paymentDue: '2021-08-19',
+    createdAt: '',
+    paymentDue: '',
     description: 'Re-branding',
     paymentTerms: 1,
     clientName: 'Jensen Huang',
@@ -240,12 +240,32 @@ const invoicesSlice = createSlice({
   reducers: {
     // eslint-disable-next-line arrow-body-style
     deleteInvoice: (state, action) => {
+      console.log(state);
       return state.filter((item) => item.id !== action.payload.id);
+    },
+    // eslint-disable-next-line arrow-body-style
+    saveInvoice: (state, action) => {
+      const newState = [...state, action.payload];
+      console.log(newState);
+      return newState;
+    },
+    editInvoice: (state, action) => {
+      const invoice = action.payload;
+      const newState = state.map((e) => (e.id === invoice.id ? invoice : e));
+      return newState;
+    },
+    setInvoicePaid: (state, action) => {
+      console.log('coucou');
+      const invoice = state.find((e) => e.id === action.payload.id);
+      const modifiedInvoice = { ...invoice, status: 'paid' };
+      console.log(modifiedInvoice);
+      const newState = state.map((e) => (e.id === modifiedInvoice.id ? modifiedInvoice : e));
+      return newState;
     },
   },
 });
 
-export const { deleteInvoice } = invoicesSlice.actions;
+export const { deleteInvoice, saveInvoice, editInvoice, setInvoicePaid } = invoicesSlice.actions;
 
 export const selectInvoices = (state) => state.invoices;
 

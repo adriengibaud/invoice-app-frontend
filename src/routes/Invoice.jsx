@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectInvoices, deleteInvoice } from 'reducers/invoicesSlice';
+import { selectInvoices, deleteInvoice, setInvoicePaid } from 'reducers/invoicesSlice';
 import { useParams, useHistory } from 'react-router-dom';
 import BackButton from 'components/buttons/BackButton';
 import EditButton from 'components/buttons/EditButton';
 import DeleteButton from 'components/buttons/DeleteButton';
 import CancelButton from 'components/buttons/CancelButton';
 import MarkAsPaidButton from 'components/buttons/MarkAsPaidButton';
-
+import EditInvoice from 'components/Invoice/EditInvoice';
 import InvoiceStatus from 'components/InvoicesList/InvoiceStatus';
 import InvoiceInfos from '../components/Invoice/InvoiceInfos';
 import InvoiceItemsList from '../components/Invoice/InvoiceItemsList';
@@ -23,6 +23,7 @@ const Invoice = () => {
   const history = useHistory();
   // eslint-disable-next-line no-unused-vars
   const [confirm, setConfirm] = useState(false);
+  const [edit, setEdit] = useState(false);
 
   const openModal = () => setConfirm(true);
   const closeModal = () => setConfirm(false);
@@ -34,6 +35,7 @@ const Invoice = () => {
 
   return (
     <>
+      {edit && <EditInvoice closeCreatingInvoice={() => setEdit(false)} data={invoice} />}
       {invoice ? (
         <>
           <Modal open={confirm} onClick={() => closeModal()}>
@@ -54,9 +56,9 @@ const Invoice = () => {
                 <InvoiceStatus status={invoice.status} />
               </StatusContainer>
               <TopActionContainer>
-                <EditButton openModal={openModal} />
+                <EditButton openEdit={() => setEdit(true)} />
                 <DeleteButton clickHandler={openModal} />
-                <MarkAsPaidButton />
+                <MarkAsPaidButton clickHandler={() => dispatch(setInvoicePaid(invoice))} />
               </TopActionContainer>
             </TopContainer>
             <InfosContainer>

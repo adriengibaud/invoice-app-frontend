@@ -1,32 +1,33 @@
 /* eslint-disable  */
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { saveInvoice } from 'reducers/invoicesSlice';
+import { editInvoice } from 'reducers/invoicesSlice';
 import styled from 'styled-components';
-import invoiceSchema from 'data/invoiceSchema';
 import InvoiceForm from '../invoiceForm/InvoiceForm';
 
-const CreateInvoice = ({ closeCreatingInvoice, data }) => {
+const EditInvoice = ({ closeCreatingInvoice, data }) => {
   const dispatch = useDispatch();
-  const pushInvoice = (data) => {
-    console.log(data);
-    dispatch(saveInvoice(data));
+  const saveEditedInvoice = (data) => {
+    dispatch(editInvoice(data));
   };
   return (
     <Background onClick={() => closeCreatingInvoice()}>
       <FormContainer onClick={(e) => e.stopPropagation()}>
         <InvoiceForm
           closeCreatingInvoice={() => closeCreatingInvoice()}
-          invoiceData={data ? data : invoiceSchema}
-          savingInvoice={(e) => pushInvoice(e)}
-          purpose="createInvoice"
+          invoiceData={data}
+          purpose="editInvoice"
+          savingInvoice={(e) => {
+            saveEditedInvoice(e);
+            closeCreatingInvoice();
+          }}
         />
       </FormContainer>
     </Background>
   );
 };
 
-export default CreateInvoice;
+export default EditInvoice;
 
 const Background = styled.div`
   position: absolute;

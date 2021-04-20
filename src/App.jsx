@@ -41,7 +41,7 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: row;
   background: ${(props) => props.theme.colors.white};
-  min-height: 100vh;
+  height: 100vh;
   width: 100vw;
   @media screen and (max-width: 900px) {
     flex-direction: column;

@@ -1,7 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const MarkAsPaidButton = () => <MarkAsPaidButtonContainer>Mark as Paid</MarkAsPaidButtonContainer>;
+const MarkAsPaidButton = ({ clickHandler }) => (
+  <MarkAsPaidButtonContainer onClick={() => clickHandler()}>Mark as Paid</MarkAsPaidButtonContainer>
+);
+
+MarkAsPaidButton.propTypes = {
+  clickHandler: PropTypes.func.isRequired,
+};
 
 export default MarkAsPaidButton;
 

@@ -1,5 +1,5 @@
 const invoiceSchema = {
-  id: '5454',
+  id: '',
   createdAt: '',
   paymentDue: '',
   clientName: '',

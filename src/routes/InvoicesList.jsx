@@ -56,8 +56,10 @@ const InvoicesContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
+  height: 85vh;
   @media screen and (max-width: 800px) {
     width: 650px;
+    height: 80vh;
   }
   @media screen and (max-width: 670px) {
     width: 90vw;
@@ -98,4 +100,8 @@ const InvoicesListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;

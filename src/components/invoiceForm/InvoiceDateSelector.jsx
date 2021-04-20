@@ -30,7 +30,7 @@ const InvoiceDateSelector = ({
     <div className="container">
       <label htmlFor="paymentTerms">
         <p className="label">Payment Terms</p>
-        <select onChange={(e) => handleSelectChange(e.target.value)}>
+        <select value={select} onChange={(e) => handleSelectChange(e.target.value)}>
           <option value="30">30 Days</option>
           <option value="60">60 Days</option>
           <option value="90">90 Days</option>
@@ -52,6 +52,7 @@ const InvoiceDateSelector = ({
             }}
             selected={paymentDue}
             onChange={(date) => paymentDueHandler(date)}
+            dateFormat="yyyy/MM/dd"
           />
         </label>
       </div>

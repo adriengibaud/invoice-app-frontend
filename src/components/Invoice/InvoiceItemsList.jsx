@@ -52,7 +52,10 @@ const InvoiceItemsContainer = styled.div`
   color: ${(props) => props.theme.colors.secondaryLight};
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
   gap: 25px;
 `;
 
