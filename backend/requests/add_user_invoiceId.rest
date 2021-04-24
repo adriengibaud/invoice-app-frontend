@@ -1,0 +1,6 @@
+PUT http://localhost:3001/user/updateUser/akldjaldkjasd111213wd
+Content-Type: application/json
+
+{
+  "invoiceId": "7878wfwe"
+}
