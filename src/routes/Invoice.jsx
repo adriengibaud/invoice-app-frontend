@@ -3,13 +3,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectInvoices, deleteInvoice, setInvoicePaid } from 'reducers/invoicesSlice';
+import { selectInvoices, deleteInvoice, setInvoiceStatus } from 'reducers/invoicesSlice';
 import { useParams, useHistory } from 'react-router-dom';
 import BackButton from 'components/buttons/BackButton';
 import EditButton from 'components/buttons/EditButton';
 import DeleteButton from 'components/buttons/DeleteButton';
 import CancelButton from 'components/buttons/CancelButton';
-import MarkAsPaidButton from 'components/buttons/MarkAsPaidButton';
+import ChangeInvoiceStatusButton from 'components/buttons/ChangeInvoiceStatusButton';
 import EditInvoice from 'components/Invoice/EditInvoice';
 import InvoiceStatus from 'components/InvoicesList/InvoiceStatus';
 import InvoiceInfos from '../components/Invoice/InvoiceInfos';
@@ -31,6 +31,11 @@ const Invoice = () => {
   const deleteHandler = () => {
     dispatch(deleteInvoice({ id: invoice.id }));
     history.push('/invoice');
+  };
+
+  const statusHandler = (status) => {
+    if (status === 'pending') dispatch(setInvoiceStatus({ status: 'paid', id }));
+    else dispatch(setInvoiceStatus({ status: 'pending', id }));
   };
 
   return (
@@ -58,7 +63,10 @@ const Invoice = () => {
               <TopActionContainer>
                 <EditButton openEdit={() => setEdit(true)} />
                 <DeleteButton clickHandler={openModal} />
-                <MarkAsPaidButton clickHandler={() => dispatch(setInvoicePaid(invoice))} />
+                <ChangeInvoiceStatusButton
+                  clickHandler={() => statusHandler(invoice.status)}
+                  status={invoice.status}
+                />
               </TopActionContainer>
             </TopContainer>
             <InfosContainer>
@@ -70,7 +78,7 @@ const Invoice = () => {
             <Actions>
               <EditButton />
               <DeleteButton />
-              <MarkAsPaidButton />
+              <ChangeInvoiceStatusButton clickHandler={() => 'yo'} status={invoice.status} />
             </Actions>
           </BottomActionContainer>
         </>
@@ -195,6 +203,7 @@ const BottomActionContainer = styled.div`
   padding: 25px;
   @media screen and (max-width: 670px) {
     display: inline;
+    padding: 25px 15px;
   }
 `;
 

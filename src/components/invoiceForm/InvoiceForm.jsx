@@ -44,7 +44,7 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
     if (select !== 'custom' && createdAt !== '') {
       setPaymentDue(addDaysToDate(createdAt, select));
     } else {
-      console.log('je ne fais rien lol');
+      console.log('non');
     }
   }, [select, createdAt]);
 

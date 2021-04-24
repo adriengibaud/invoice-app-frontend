@@ -254,18 +254,17 @@ const invoicesSlice = createSlice({
       const newState = state.map((e) => (e.id === invoice.id ? invoice : e));
       return newState;
     },
-    setInvoicePaid: (state, action) => {
+    setInvoiceStatus: (state, action) => {
       console.log('coucou');
       const invoice = state.find((e) => e.id === action.payload.id);
-      const modifiedInvoice = { ...invoice, status: 'paid' };
-      console.log(modifiedInvoice);
+      const modifiedInvoice = { ...invoice, status: action.payload.status };
       const newState = state.map((e) => (e.id === modifiedInvoice.id ? modifiedInvoice : e));
       return newState;
     },
   },
 });
 
-export const { deleteInvoice, saveInvoice, editInvoice, setInvoicePaid } = invoicesSlice.actions;
+export const { deleteInvoice, saveInvoice, editInvoice, setInvoiceStatus } = invoicesSlice.actions;
 
 export const selectInvoices = (state) => state.invoices;
 
