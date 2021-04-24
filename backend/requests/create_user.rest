@@ -1,7 +1,0 @@
-POST http://localhost:3001/user/getuser
-Content-Type: application/json
-
-{
-  "id": "akldjaldkjasd111213wd",
-  "invoice": ["787878", "8787877"]
-}
