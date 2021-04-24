@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const Home = () => (
   <>
-    <Link to="/invoice">View invoices</Link>
+    <Link to="/invoice">View invoices .</Link>
   </>
 );
 
