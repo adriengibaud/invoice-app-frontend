@@ -6,6 +6,7 @@ import NewInvoiceButton from 'components/buttons/NewInvoiceButton';
 import { selectInvoices, fetchInvoiceByUserId } from 'reducers/invoicesSlice';
 import CreateInvoice from 'components/Invoice/CreateInvoice';
 import { selectUserId } from 'reducers/userSlice';
+import illustrationEmpty from 'assets/illustration-empty.svg';
 import InvoiceListEntry from '../components/InvoicesList/InvoiceListEntry';
 
 const InvoicesList = () => {
@@ -45,7 +46,7 @@ const InvoicesList = () => {
           </InvoicesTitle>
           <NewInvoiceButton clickHandler={() => toggleCreatingInvoice} />
         </InvoicesHeader>
-        {invoicesData !== null ? (
+        {invoicesData.length > 0 ? (
           <InvoicesListContainer>
             {invoicesData.map((e) => (
               <Link key={e.id} style={{ textDecoration: 'none' }} to={`/invoice/${e.id}`}>
@@ -54,7 +55,7 @@ const InvoicesList = () => {
             ))}
           </InvoicesListContainer>
         ) : (
-          <h1>No invoices</h1>
+          <img src={illustrationEmpty} alt="" />
         )}
       </InvoicesContainer>
     </>
@@ -70,9 +71,16 @@ const InvoicesContainer = styled.div`
   flex-direction: column;
   gap: 40px;
   height: 85vh;
+  img {
+    width: 50vw;
+    margin: auto;
+  }
   @media screen and (max-width: 800px) {
     width: 650px;
     height: 80vh;
+    img {
+      width: 80vw;
+    }
   }
   @media screen and (max-width: 670px) {
     width: 90vw;
