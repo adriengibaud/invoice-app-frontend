@@ -5,7 +5,7 @@ import InvoiceStatus from './InvoiceStatus';
 
 const InvoiceListEntry = ({ invoice }) => (
   <InvoiceBody>
-    <p className="id">{invoice.id}</p>
+    <p className="id">#{invoice.id}</p>
     <p className="payment-due">Due {invoice.paymentDue}</p>
     <p className="client-name">{invoice.clientName}</p>
     <p className="total">€ {invoice.total}</p>
@@ -38,9 +38,13 @@ const InvoiceBody = styled.div`
   -webkit-box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.1);
   box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.1);
   .id {
+    max-width: 85px;
     font-weight: 900;
     grid-area: id;
     color: #551a8b;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .payment-due {

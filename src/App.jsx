@@ -1,9 +1,9 @@
+import React from 'react';
 import Login from 'routes/Login';
 import Home from 'routes/Home';
 import NavBar from 'components/NavBar/NavBar';
 import Invoice from 'routes/Invoice';
 import GlobalStyle from 'global.style';
-import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from 'theme';
@@ -22,11 +22,9 @@ function App() {
 
           <Switch>
             <Route path="/login">{userName ? <Redirect to="/invoice" /> : <Login />}</Route>
-            <Route path="/invoice/:id">{userName ? <Invoice /> : <Redirect to="/login" />}</Route>
-            <Route path="/invoice">{userName ? <InvoicesList /> : <Redirect to="/login" />}</Route>
-            <Route path="/">
-              <Home />
-            </Route>
+            <Route path="/invoice/:id">{userName ? <Invoice /> : <Redirect to="/" />}</Route>
+            <Route path="/invoice">{userName ? <InvoicesList /> : <Redirect to="/" />}</Route>
+            <Route path="/"> {userName ? <Redirect to="/invoice" /> : <Home />}</Route>
           </Switch>
         </AppContainer>
       </Router>

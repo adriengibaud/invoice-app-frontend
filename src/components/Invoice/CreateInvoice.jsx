@@ -1,7 +1,7 @@
 /* eslint-disable  */
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { saveInvoice } from 'reducers/invoicesSlice';
+import { createInvoice, saveInvoice } from 'reducers/invoicesSlice';
 import styled from 'styled-components';
 import invoiceSchema from 'data/invoiceSchema';
 import InvoiceForm from '../invoiceForm/InvoiceForm';
@@ -10,7 +10,7 @@ const CreateInvoice = ({ closeCreatingInvoice, data }) => {
   const dispatch = useDispatch();
   const pushInvoice = (data) => {
     console.log(data);
-    dispatch(saveInvoice(data));
+    dispatch(createInvoice(data));
   };
   return (
     <Background onClick={() => closeCreatingInvoice()}>
@@ -18,7 +18,10 @@ const CreateInvoice = ({ closeCreatingInvoice, data }) => {
         <InvoiceForm
           closeCreatingInvoice={() => closeCreatingInvoice()}
           invoiceData={data ? data : invoiceSchema}
-          savingInvoice={(e) => pushInvoice(e)}
+          savingInvoice={(e) => {
+            pushInvoice(e);
+            closeCreatingInvoice();
+          }}
           purpose="createInvoice"
         />
       </FormContainer>

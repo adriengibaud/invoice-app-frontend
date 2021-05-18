@@ -1,6 +1,6 @@
 /* eslint-disable react/button-has-type */
 import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
+
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setActiveUser,
@@ -9,6 +9,7 @@ import {
   selectUserName,
   selectUserImage,
 } from 'reducers/userSlice';
+import { cleanInvoice } from 'reducers/invoicesSlice';
 import styled from 'styled-components';
 import { auth, provider } from '../../firebase';
 
@@ -28,18 +29,13 @@ const Auth = () => {
       .then(() => {
         dispatch(setUserLogoutState());
       })
-      .catch((err) => alert(err));
+      .then(() => dispatch(cleanInvoice()));
   };
 
   useEffect(() => {
-    const getInvoice = async () => {
-      const invoiceTest = await axios.get('http://localhost:3001/ping');
-      console.log(invoiceTest);
-    };
     if (userName === null) {
       auth.onAuthStateChanged((user) => {
         if (user !== null && userEmail === null) {
-          console.log(user);
           dispatch(
             setActiveUser({
               userName: user.displayName,
@@ -51,7 +47,6 @@ const Auth = () => {
         }
       });
     }
-    getInvoice();
   }, []);
 
   const authContainer = useRef();

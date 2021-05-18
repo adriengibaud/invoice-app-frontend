@@ -6,6 +6,5 @@ export function addDaysToDate(date, days) {
 export function transformDateToString(date) {
   const offset = date.getTimezoneOffset();
   const modifiedDate = new Date(date.getTime() - offset * 60 * 1000);
-  console.log(modifiedDate);
   return modifiedDate.toISOString().split('T')[0];
 }

@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import NewInvoiceButton from 'components/buttons/NewInvoiceButton';
-import { selectInvoices } from 'reducers/invoicesSlice';
+import { selectInvoices, fetchInvoiceByUserId } from 'reducers/invoicesSlice';
 import CreateInvoice from 'components/Invoice/CreateInvoice';
+import { selectUserId } from 'reducers/userSlice';
 import InvoiceListEntry from '../components/InvoicesList/InvoiceListEntry';
 
 const InvoicesList = () => {
+  const dispatch = useDispatch();
   const invoicesData = useSelector(selectInvoices);
+  const userId = useSelector(selectUserId);
   const [newInvoice, setNewInvoice] = useState(false);
 
   const subCount = () => {
+    if (invoicesData === null) return 'There is no invoice';
     switch (invoicesData.length) {
       case 0:
         return 'There is no invoice';
@@ -25,9 +29,14 @@ const InvoicesList = () => {
   const toggleCreatingInvoice = () => setNewInvoice(true);
   const closeCreatingInvoice = () => setNewInvoice(false);
 
+  useEffect(() => {
+    if (invoicesData.length === 0) dispatch(fetchInvoiceByUserId(userId));
+  }, []);
+
   return (
     <>
       {newInvoice && <CreateInvoice closeCreatingInvoice={closeCreatingInvoice} />}
+
       <InvoicesContainer>
         <InvoicesHeader>
           <InvoicesTitle>
@@ -36,13 +45,17 @@ const InvoicesList = () => {
           </InvoicesTitle>
           <NewInvoiceButton clickHandler={() => toggleCreatingInvoice} />
         </InvoicesHeader>
-        <InvoicesListContainer>
-          {invoicesData.map((e) => (
-            <Link style={{ textDecoration: 'none' }} to={`/invoice/${e.id}`}>
-              <InvoiceListEntry invoice={e} />
-            </Link>
-          ))}
-        </InvoicesListContainer>
+        {invoicesData !== null ? (
+          <InvoicesListContainer>
+            {invoicesData.map((e) => (
+              <Link key={e.id} style={{ textDecoration: 'none' }} to={`/invoice/${e.id}`}>
+                <InvoiceListEntry invoice={e} />
+              </Link>
+            ))}
+          </InvoicesListContainer>
+        ) : (
+          <h1>No invoices</h1>
+        )}
       </InvoicesContainer>
     </>
   );

@@ -1,14 +1,14 @@
 /* eslint-disable  */
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { editInvoice } from 'reducers/invoicesSlice';
+import { editInvoice, updateInvoice } from 'reducers/invoicesSlice';
 import styled from 'styled-components';
 import InvoiceForm from '../invoiceForm/InvoiceForm';
 
 const EditInvoice = ({ closeCreatingInvoice, data }) => {
   const dispatch = useDispatch();
   const saveEditedInvoice = (data) => {
-    dispatch(editInvoice(data));
+    dispatch(updateInvoice(data));
   };
   return (
     <Background onClick={() => closeCreatingInvoice()}>

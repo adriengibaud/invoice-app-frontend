@@ -6,17 +6,21 @@ import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css';
 import { addDaysToDate, transformDateToString } from 'utils/dateManipulation';
 import AddItemButton from 'components/buttons/AddItemButton';
 import BackButton from 'components/buttons/BackButton';
-import SaveInvoiceButton from 'components/buttons/SaveInvoiceButton';
+import { selectUserId } from 'reducers/userSlice';
+import Button from 'components/buttons/Button';
 import ItemList from './ItemList';
 import InvoiceDateSelector from './InvoiceDateSelector';
 import Input from './Input';
+import BottomButtons from './BottomButtons';
 
 const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose }) => {
-  const [id, setId] = useState(invoiceData.id === '' ? uuidv4 : invoiceData.id);
+  const userId = useSelector(selectUserId);
+  const [id, setId] = useState(purpose === 'createInvoice' ? uuidv4() : invoiceData.id);
   const [description, setDescription] = useState(invoiceData.description);
   const [createdAt, setCreatedAt] = useState(
     invoiceData.createdAt.length > 0 ? new Date(invoiceData.createdAt) : ''
@@ -43,17 +47,12 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
   useEffect(() => {
     if (select !== 'custom' && createdAt !== '') {
       setPaymentDue(addDaysToDate(createdAt, select));
-    } else {
-      console.log('non');
     }
   }, [select, createdAt]);
 
-  const submitForm = (event) => {
-    event.preventDefault();
-  };
-
   const invoiceFinalData = {
     id,
+    userId,
     createdAt: createdAt.getDay ? transformDateToString(createdAt) : '',
     paymentDue: paymentDue.getDay ? transformDateToString(paymentDue) : '',
     clientName,
@@ -94,16 +93,24 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
     setItems(itemsCopy);
   };
 
-  const deleteItem = (item) => setItems(items.filter((e) => e.id !== item));
+  const deleteItem = (item) => {
+    setItems(items.filter((e) => e.id !== item));
+  };
+
+  const enterPressed = (event) => {
+    const code = event.keyCode || event.which;
+    if (code === 13) {
+      savingInvoice(invoiceFinalData);
+    }
+  };
 
   return (
-    <FormContainer onSubmit={submitForm}>
-      <p>{purpose}</p>
+    <FormContainer onSubmit={(e) => e.preventDefault()}>
       <BackButtonContainer>
         <BackButton clickHandler={() => closeCreatingInvoice()} />
       </BackButtonContainer>
 
-      <h1>New Invoice</h1>
+      {purpose === 'editInvoice' ? <p>Edit Invoice</p> : <p>New Invoice</p>}
       <FormPart>
         <h3>Bill From</h3>
         <FullSizeEntry numberPerLine="one">
@@ -111,6 +118,7 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
             text="Street Address"
             data={senderAddress.street}
             dataChangeHandler={(street) => setSenderAddress({ ...senderAddress, street })}
+            keyPress={(e) => enterPressed(e)}
           />
         </FullSizeEntry>
         <FullSizeEntry numberPerLine="three">
@@ -118,16 +126,19 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
             text="City"
             data={senderAddress.city}
             dataChangeHandler={(city) => setSenderAddress({ ...senderAddress, city })}
+            keyPress={(e) => enterPressed(e)}
           />
           <Input
             text="Post Code"
             data={senderAddress.postCode}
             dataChangeHandler={(postCode) => setSenderAddress({ ...senderAddress, postCode })}
+            keyPress={(e) => enterPressed(e)}
           />
           <Input
             text="Country"
             data={senderAddress.country}
             dataChangeHandler={(country) => setSenderAddress({ ...senderAddress, country })}
+            keyPress={(e) => enterPressed(e)}
           />
         </FullSizeEntry>
       </FormPart>
@@ -138,16 +149,19 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
             data={clientName}
             dataChangeHandler={(name) => setClientName(name)}
             text="Client's Name"
+            keyPress={(e) => enterPressed(e)}
           />
           <Input
             data={clientEmail}
             dataChangeHandler={(email) => setClientEmail(email)}
             text="Client's Email"
+            keyPress={(e) => enterPressed(e)}
           />
           <Input
             data={clientAddress.street}
             dataChangeHandler={(street) => setClientAddress({ ...clientAddress, street })}
             text="Street Address"
+            keyPress={(e) => enterPressed(e)}
           />
         </FullSizeEntry>
         <FullSizeEntry numberPerLine="three">
@@ -155,16 +169,19 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
             data={clientAddress.city}
             dataChangeHandler={(city) => setClientAddress({ ...clientAddress, city })}
             text="City"
+            keyPress={(e) => enterPressed(e)}
           />
           <Input
             data={clientAddress.postCode}
             dataChangeHandler={(postCode) => setClientAddress({ ...clientAddress, postCode })}
             text="Post Code"
+            keyPress={(e) => enterPressed(e)}
           />
           <Input
             data={clientAddress.country}
             dataChangeHandler={(country) => setClientAddress({ ...clientAddress, country })}
             text="Country"
+            keyPress={(e) => enterPressed(e)}
           />
         </FullSizeEntry>
       </FormPart>
@@ -194,12 +211,15 @@ const InvoiceForm = ({ invoiceData, closeCreatingInvoice, savingInvoice, purpose
               />
             );
           })}
-        <AddItemButton margin="20px" clickHandler={() => addItem} />
+        <Button text="+ Add New Item" clickHandler={() => addItem()} color="primary" />
       </FormPart>
       <ButtonContainer>
-        <SaveInvoiceButton
-          text="save changes"
-          clickHandler={() => savingInvoice(invoiceFinalData)}
+        <BottomButtons
+          purpose={purpose}
+          saveInvoice={(e) => {
+            if (e === 'draft') savingInvoice({ ...invoiceFinalData, status: 'draft' });
+            else savingInvoice(invoiceFinalData);
+          }}
         />
       </ButtonContainer>
     </FormContainer>
@@ -302,6 +322,7 @@ const FullSizeEntry = styled.div`
 `;
 
 const ButtonContainer = styled.div`
+  margin-top: 30px;
   width: 100%;
   display: flex;
   flex-direction: row;

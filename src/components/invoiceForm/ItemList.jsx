@@ -35,7 +35,13 @@ const ItemList = ({ data, handleDelete, position, modifyItem }) => (
         <p> {data.total}</p>
       </label>
     </ItemData>
-    <ItemData position={position} dataType="bin" onClick={() => handleDelete(data.id)}>
+    <ItemData
+      position={position}
+      dataType="bin"
+      onClick={() => {
+        handleDelete(data.id);
+      }}
+    >
       <label htmlFor="bin">
         <h6>{''}</h6>
         <div className="imgContainer">

@@ -3,15 +3,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectInvoices, deleteInvoice, setInvoiceStatus } from 'reducers/invoicesSlice';
+import { selectInvoices, deleteInvoiceById, updateInvoice } from 'reducers/invoicesSlice';
 import { useParams, useHistory } from 'react-router-dom';
 import BackButton from 'components/buttons/BackButton';
-import EditButton from 'components/buttons/EditButton';
-import DeleteButton from 'components/buttons/DeleteButton';
-import CancelButton from 'components/buttons/CancelButton';
-import ChangeInvoiceStatusButton from 'components/buttons/ChangeInvoiceStatusButton';
 import EditInvoice from 'components/Invoice/EditInvoice';
 import InvoiceStatus from 'components/InvoicesList/InvoiceStatus';
+import Button from 'components/buttons/Button';
 import InvoiceInfos from '../components/Invoice/InvoiceInfos';
 import InvoiceItemsList from '../components/Invoice/InvoiceItemsList';
 
@@ -29,13 +26,13 @@ const Invoice = () => {
   const closeModal = () => setConfirm(false);
 
   const deleteHandler = () => {
-    dispatch(deleteInvoice({ id: invoice.id }));
+    dispatch(deleteInvoiceById(id));
     history.push('/invoice');
   };
 
   const statusHandler = (status) => {
-    if (status === 'pending') dispatch(setInvoiceStatus({ status: 'paid', id }));
-    else dispatch(setInvoiceStatus({ status: 'pending', id }));
+    if (status === 'pending') dispatch(updateInvoice({ ...invoice, status: 'paid' }));
+    else dispatch(updateInvoice({ ...invoice, status: 'pending' }));
   };
 
   return (
@@ -48,8 +45,8 @@ const Invoice = () => {
               <h3>Confirm Deletion</h3>
               <p>Are you sure you want to delete invoice #{id}? This action cannot be undone.</p>
               <div className="buttons-container">
-                <CancelButton toggleModal={closeModal} />
-                <DeleteButton clickHandler={deleteHandler} />
+                <Button text="Cancel" clickHandler={closeModal} color="white" />
+                <Button clickHandler={deleteHandler} text="Confirm" color="red" />
               </div>
             </div>
           </Modal>
@@ -61,11 +58,17 @@ const Invoice = () => {
                 <InvoiceStatus status={invoice.status} />
               </StatusContainer>
               <TopActionContainer>
-                <EditButton openEdit={() => setEdit(true)} />
-                <DeleteButton clickHandler={openModal} />
-                <ChangeInvoiceStatusButton
+                <Button color="secondary" text="Edit" clickHandler={() => setEdit(true)} />
+
+                <Button clickHandler={openModal} text="Delete" color="red" />
+                <Button
                   clickHandler={() => statusHandler(invoice.status)}
-                  status={invoice.status}
+                  text={
+                    (invoice.status === 'pending' && 'Mark as Paid') ||
+                    (invoice.status === 'draft' && 'Set Active') ||
+                    (invoice.status === 'paid' && 'Mark as Pending')
+                  }
+                  color="primary"
                 />
               </TopActionContainer>
             </TopContainer>
@@ -76,9 +79,17 @@ const Invoice = () => {
           </InvoiceContainer>
           <BottomActionContainer>
             <Actions>
-              <EditButton />
-              <DeleteButton />
-              <ChangeInvoiceStatusButton clickHandler={() => 'yo'} status={invoice.status} />
+              <Button color="secondary" text="Edit" clickHandler={() => setEdit(true)} />
+              <Button clickHandler={openModal} text="Delete" color="red" />
+              <Button
+                clickHandler={() => statusHandler(invoice.status)}
+                text={
+                  (invoice.status === 'pending' && 'Mark as Paid') ||
+                  (invoice.status === 'draft' && 'Set Active') ||
+                  (invoice.status === 'paid' && 'Mark as Pending')
+                }
+                color="primary"
+              />
             </Actions>
           </BottomActionContainer>
         </>
