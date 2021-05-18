@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://localhost:3001/invoice';
+const baseUrl = 'http://localhost:3001/api/invoice';
 
 const getAll = (userId) => {
   const request = axios.get(`${baseUrl}/${userId}`);
