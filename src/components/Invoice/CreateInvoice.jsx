@@ -9,7 +9,6 @@ import InvoiceForm from '../invoiceForm/InvoiceForm';
 const CreateInvoice = ({ closeCreatingInvoice, data }) => {
   const dispatch = useDispatch();
   const pushInvoice = (data) => {
-    console.log(data);
     dispatch(createInvoice(data));
   };
   return (
