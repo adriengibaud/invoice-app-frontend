@@ -19,7 +19,6 @@ function App() {
       <Router>
         <AppContainer>
           <NavBar />
-
           <Switch>
             <Route path="/login">{userName ? <Redirect to="/invoice" /> : <Login />}</Route>
             <Route path="/invoice/:id">{userName ? <Invoice /> : <Redirect to="/" />}</Route>
